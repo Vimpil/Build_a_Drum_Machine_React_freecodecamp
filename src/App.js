@@ -116,19 +116,6 @@ const bankTwo = [
   }
 ];
 
-const activeStyle = {
-backgroundColor: '#F2B705',
-boxShadow: "0 3px #F2B705",
-height: 77,
-marginTop: 13
-}
-
-const inactiveStyle = {
-backgroundColor: '#0388A6',
-marginTop: 10,
-boxShadow: "3px 3px 5px black"
-}
-
 class DrumInterface extends React.Component {
   constructor(props) {
     super(props);
@@ -146,31 +133,6 @@ class DrumInterface extends React.Component {
       this.playSound();
     }
   }
-
-  activatePad() {
-  if (this.props.power) {
-    this.state.padStyle.backgroundColor === '#F2B705' ? 
-      this.setState({
-        padStyle: inactiveStyle
-    }) :
-    this.setState({
-        padStyle: activeStyle
-    });
-  } else {
-    this.state.PadStyle.marginTop === 13 ? 
-      this.setState({
-        padStyle: inactiveStyle
-    }) : 
-      this.setState({
-        padstyle: {
-          height:77,
-          marginTop: 13,
-          backgroundColor: '#0388A6',
-          boxShadow: "0 3px black"
-        }
-    });
-  }
-}
 
   playSound(e) {
     const sound = document.getElementById(this.props.keyTrigger);
@@ -212,7 +174,6 @@ class DrumPad extends React.Component {
             />
           );
         }))
-        
       : (DrumPad = this.props.currentPadBank.map((drumObj, i, DrumPadArr) => {
           return (
             <DrumInterface
@@ -289,23 +250,26 @@ export default class App extends React.Component {
     });
   }
   render() {
+    const bankSlider =
+      this.state.currentPadBank === bankOne
+        ? {
+            float: "left"
+          }
+        : {
+            float: "right"
+          };
+    const clips = [].slice.call(document.getElementsByClassName("clip"));
 
-    const bankSlider = this.state.currentPadBank === bankOne ? {
-    float: 'left'
-  } : {
-    float: 'right'
-  };
-  const clips = [].slice.call(document.getElementsByClassName('clip'));
-
-    clips.forEach(sound =>{
-      sound.volume = this.state.sliderVal
+    clips.forEach((sound) => {
+      sound.volume = this.state.sliderVal;
     });
-    const powerSlider = this.state.power ? {
-    float: 'right'
-  } : {
-    float: 'left'
-  };
-
+    const powerSlider = this.state.power
+      ? {
+          float: "right"
+        }
+      : {
+          float: "left"
+        };
 
     return (
       <div className="App">
@@ -321,14 +285,21 @@ export default class App extends React.Component {
             <div className="control">
               <p>Power</p>
               <div onClick={this.powerControl} className="select">
-            <div style={powerSlider} className="inner"/>
-          </div>
-        </div>
+                <div style={powerSlider} className="inner" />
+              </div>
+            </div>
 
             <p id="display">{this.state.display}</p>
 
             <div className="volume-slider">
-              <input type="range" min="0" max="1" step="0.01" value={this.state.sliderVal} onChange={this.adjustVolume} />
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={this.state.sliderVal}
+                onChange={this.adjustVolume}
+              />
             </div>
 
             <div className="control">
